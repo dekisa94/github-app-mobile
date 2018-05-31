@@ -5,6 +5,8 @@
 
 
   <div class="container">
+    <v-ons-progress-circular indeterminate v-if="query && !isSearchDone"/>
+    <div v-else>
         <v-ons-list v-for="(fetchResult, key) in repos" :key="key" v-if="fetchResult.id">
           <v-ons-list-header>Repositories of {{fetchResult.owner.login}}</v-ons-list-header>
           <v-ons-list-item>
@@ -17,6 +19,7 @@
             </div>
           </v-ons-list-item>
         </v-ons-list>
+    </div>
   </div>
 
     </v-ons-page>
@@ -35,7 +38,8 @@ export default {
     return {
       query: "",
       repos: [],
-      image: ""
+      image: "",
+      isSearchDone: false,
     };
   },
   methods: {
@@ -44,6 +48,7 @@ export default {
         .gitRepos(this.query)
         .then(response => {
           this.repos = response.data;
+          this.isSearchDone = true;
           this.repos.forEach(repo => {
             this.image = repo.owner.avatar_url;
           });
@@ -56,6 +61,7 @@ export default {
   watch: {
     query: function() {
       this.getRepos()
+      this.isSearchDone = false;
     }
   }
 };
