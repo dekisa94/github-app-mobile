@@ -22,6 +22,7 @@
     </v-ons-page>
 </template>
 <script>
+import debounce from "lodash/debounce";
 import AppToolbar from "./components/AppToolbar";
 import AppSearch from "./components/AppSearch";
 import { gitService } from "./service/GitService";
@@ -38,7 +39,7 @@ export default {
     };
   },
   methods: {
-    getAnswer() {
+    getRepos: debounce(function () {
       gitService
         .gitRepos(this.query)
         .then(response => {
@@ -50,11 +51,11 @@ export default {
         .catch(errors => {
           console.log(errors);
         });
-    }
+    }, 500)
   },
   watch: {
     query: function() {
-      this.getAnswer();
+      this.getRepos()
     }
   }
 };
