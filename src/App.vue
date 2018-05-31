@@ -6,7 +6,7 @@
 
   <div class="container">
     <v-ons-progress-circular indeterminate v-if="query && !isSearchDone && !errorsNew"/>
-    <empty-state v-if="errorsNew && query" :type="query" />
+    <Page404 v-if="errorsNew && query" />
     <div v-else>
         <v-ons-list v-for="(fetchResult, key) in repos" :key="key" v-if="fetchResult.id">
           <v-ons-list-header>Repositories of {{fetchResult.owner.login}}</v-ons-list-header>
@@ -21,6 +21,7 @@
           </v-ons-list-item>
         </v-ons-list>
     </div>
+    <empty-state v-if="!repos.length && query" :type="query"/>
   </div>
 
     </v-ons-page>
@@ -30,12 +31,14 @@ import debounce from "lodash/debounce";
 import AppToolbar from "./components/AppToolbar";
 import AppSearch from "./components/AppSearch";
 import EmptyState from "./components/EmptyState";
+import Page404 from "./components/Page404";
 import { gitService } from "./service/GitService";
 export default {
   components: {
     AppToolbar,
     AppSearch,
-    EmptyState
+    EmptyState,
+    Page404
   },
   data() {
     return {

@@ -1,12 +1,12 @@
 <template>
     <v-ons-card>
-      <img src="https://pbs.twimg.com/media/Bt5MoW0CIAE9Fda.jpg" alt="404 not found" style="width: 100%">
+      <img src="https://pbs.twimg.com/media/Bt5MoW0CIAE9Fda.jpg" alt="No repositories" style="width: 100%">
       <div class="title">
         :(
       </div>
       <div class="content">
         <v-ons-list>
-          <v-ons-list-header>404 not found</v-ons-list-header>
+          <v-ons-list-header>No repositories</v-ons-list-header>
           <v-ons-list-item>There are no {{type|plur }} here...</v-ons-list-item>
         </v-ons-list>
       </div>
