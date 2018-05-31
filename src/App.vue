@@ -8,9 +8,9 @@
     <v-ons-progress-circular indeterminate v-if="query && !isSearchDone && !errorsNew"/>
     <Page404 v-if="errorsNew && query" />
     <div v-else>
-        <v-ons-list v-for="(fetchResult, key) in repos" :key="key" v-if="fetchResult.id">
-          <v-ons-list-header>Repositories of {{fetchResult.owner.login}}</v-ons-list-header>
-          <v-ons-list-item>
+        <v-ons-list v-if="user">
+          <v-ons-list-header v-if="user">Repositories of {{user}}</v-ons-list-header>
+          <v-ons-list-item v-for="(fetchResult, key) in repos" :key="key">
             <div class="left">
               <img class="list-item__thumbnail" :src="image">
             </div>
@@ -46,7 +46,8 @@ export default {
       repos: [],
       image: "",
       isSearchDone: false,
-      error: ""
+      error: "",
+      user: ""
     };
   },
   methods: {
@@ -59,11 +60,11 @@ export default {
           this.isSearchDone = true;
           this.repos.forEach(repo => {
             this.image = repo.owner.avatar_url;
+            this.user = repo.owner.login;
           });
         })
         .catch(errors => {
           this.error = errors.message;
-          console.log(errors.message)
         });
     }, 500)
   },
