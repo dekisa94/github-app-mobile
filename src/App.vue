@@ -5,7 +5,8 @@
 
 
   <div class="container">
-    <v-ons-progress-circular indeterminate v-if="query && !isSearchDone"/>
+    <v-ons-progress-circular indeterminate v-if="query && !isSearchDone && !errorsNew"/>
+    <empty-state v-if="errorsNew && query" :type="query" />
     <div v-else>
         <v-ons-list v-for="(fetchResult, key) in repos" :key="key" v-if="fetchResult.id">
           <v-ons-list-header>Repositories of {{fetchResult.owner.login}}</v-ons-list-header>
@@ -28,11 +29,13 @@
 import debounce from "lodash/debounce";
 import AppToolbar from "./components/AppToolbar";
 import AppSearch from "./components/AppSearch";
+import EmptyState from "./components/EmptyState";
 import { gitService } from "./service/GitService";
 export default {
   components: {
     AppToolbar,
-    AppSearch
+    AppSearch,
+    EmptyState
   },
   data() {
     return {
@@ -40,10 +43,12 @@ export default {
       repos: [],
       image: "",
       isSearchDone: false,
+      error: ""
     };
   },
   methods: {
     getRepos: debounce(function () {
+      this.error = "";
       gitService
         .gitRepos(this.query)
         .then(response => {
@@ -54,7 +59,8 @@ export default {
           });
         })
         .catch(errors => {
-          console.log(errors);
+          this.error = errors.message;
+          console.log(errors.message)
         });
     }, 500)
   },
@@ -62,6 +68,11 @@ export default {
     query: function() {
       this.getRepos()
       this.isSearchDone = false;
+    }
+  },
+  computed:{
+    errorsNew(){
+      return this.error;
     }
   }
 };
