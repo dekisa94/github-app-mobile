@@ -1,7 +1,16 @@
 <template>
     <v-ons-page>
-      <app-toolbar />
+      <app-toolbar>
+        <div slot="left">
+          Radi
+        </div>
+        <div slot="right">
+          Radi desni
+        </div>
+      </app-toolbar>
+      
       <app-search :query.sync="query" placeholder="Find repository"/>
+      <v-ons-button modifier="large">View Profile</v-ons-button>
 
 
   <div class="container">
@@ -51,7 +60,7 @@ export default {
     };
   },
   methods: {
-    getRepos: debounce(function () {
+    getRepos: debounce(function() {
       this.error = "";
       gitService
         .gitRepos(this.query)
@@ -70,12 +79,12 @@ export default {
   },
   watch: {
     query: function() {
-      this.getRepos()
+      this.getRepos();
       this.isSearchDone = false;
     }
   },
-  computed:{
-    errorsNew(){
+  computed: {
+    errorsNew() {
       return this.error;
     }
   }
