@@ -72,7 +72,12 @@ export default {
         });
     }, 500),
     pushStack(){
-      this.$emit('push-page', profile);
+      this.$emit('push-page', {
+        extends: profile,
+        onsNavigatorProps:{
+            username: this.query
+          }
+        });
     }
   },
   watch: {
