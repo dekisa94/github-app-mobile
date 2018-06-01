@@ -1,7 +1,12 @@
 <template>
     <v-ons-page>
+      <app-toolbar title="Profile">
+        <div slot="left">
+          <v-ons-back-button>Repos page</v-ons-back-button>
+        </div>
+      </app-toolbar>
         <v-ons-card>
-            <img :src="image">
+            <img src="">
             <div class="title">
                 Test
             </div>
@@ -16,15 +21,15 @@
 </template>
 
 <script>
+import AppToolbar from "./AppToolbar";
 import { gitService } from "./../service/GitService";
 export default {
+  components:{
+    AppToolbar
+  },
   data() {
     return {
-      image: ""
-    };
-  },
-  beforeRouteEnter(to, from, next) {
-    gitService.gitUser();
+    }
   }
 };
 </script>

@@ -1,16 +1,10 @@
 <template>
     <v-ons-page>
       <app-toolbar>
-        <div slot="left">
-          Radi
-        </div>
-        <div slot="right">
-          Radi desni
-        </div>
       </app-toolbar>
       
       <app-search :query.sync="query" placeholder="Find repository"/>
-      <v-ons-button modifier="large">View Profile</v-ons-button>
+      <v-ons-button modifier="large" @click="pushStack">View Profile</v-ons-button>
 
 
   <div class="container">
@@ -41,6 +35,7 @@ import AppToolbar from "./components/AppToolbar";
 import AppSearch from "./components/AppSearch";
 import EmptyState from "./components/EmptyState";
 import Page404 from "./components/Page404";
+import profile from "./components/Profile";
 import { gitService } from "./service/GitService";
 export default {
   components: {
@@ -75,7 +70,10 @@ export default {
         .catch(errors => {
           this.error = errors.message;
         });
-    }, 500)
+    }, 500),
+    pushStack(){
+      this.$emit('push-page', profile);
+    }
   },
   watch: {
     query: function() {

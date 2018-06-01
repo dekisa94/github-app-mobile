@@ -7,7 +7,7 @@ require('onsenui/css/onsenui.css');
 require('./assets/onsen-css-components.css');
 require('./assets/theme.css');
 
-import App from './App.vue';
+import App from './components/Navigator.vue';
 
 Vue.use(VueOnsen);
 
@@ -16,4 +16,3 @@ new Vue({
   template:'<app></app>',
   components: { App }
 });
-
