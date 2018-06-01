@@ -18,6 +18,29 @@
                   <v-ons-list-item>Following: {{user.following}}</v-ons-list-item>
                   </v-ons-list>
           </v-ons-card>
+
+          <div class="notes">
+          <v-ons-list>
+            <v-ons-list-header>Personal Notes for user:</v-ons-list-header>
+            <v-ons-list-item>
+              <div class="center">
+                <v-ons-input placeholder="Leave your note here" float v-model="newNote"/>
+                <v-ons-button @click="storeLocal">Save note</v-ons-button>
+              </div>
+            </v-ons-list-item>
+            <v-ons-list-item>
+              <div class="left">
+                {{Note1}}
+              </div>
+            </v-ons-list-item>
+            <v-ons-list-item>
+              <div class="left">
+                Note 2
+              </div>
+            </v-ons-list-item>
+          </v-ons-list>
+        </div>
+
         </div>
     </v-ons-page>
 </template>
@@ -40,16 +63,25 @@ export default {
     return {
       user: [],
       image: "",
-      error: ""
+      error: "",
+      newNote: "",
+      Note1: ""
     }
   },
   created(){
+    if(localStorage.getItem('note1')) this.Note1 = localStorage.getItem('note1');
+
     gitService.gitUser(this.username).then(response => {
       this.user = response.data;
       this.image = response.data.avatar_url
     }).catch(errors =>{
       this.error = errors.message;
     })
+  },
+  methods:{
+    storeLocal(){
+      localStorage.setItem('note1', this.newNote);
+    }
   }
 };
 </script>
