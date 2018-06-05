@@ -24,18 +24,13 @@
             <v-ons-list-header>Personal Notes for user:</v-ons-list-header>
             <v-ons-list-item>
               <div class="center">
-                <v-ons-input placeholder="Leave your note here" float v-model="newNote"/>
+                <v-ons-input placeholder="Leave your note here" float v-model="note.content"/>
                 <v-ons-button @click="storeLocal">Save note</v-ons-button>
               </div>
             </v-ons-list-item>
-            <v-ons-list-item>
+            <v-ons-list-item v-for="(note, key) in notes" :key="key">
               <div class="left">
-                {{Note1}}
-              </div>
-            </v-ons-list-item>
-            <v-ons-list-item>
-              <div class="left">
-                Note 2
+                {{note.content}}
               </div>
             </v-ons-list-item>
           </v-ons-list>
@@ -50,11 +45,11 @@ import AppToolbar from "./AppToolbar";
 import Page404 from "./Page404";
 import { gitService } from "./../service/GitService";
 export default {
-  components:{
+  components: {
     AppToolbar,
     Page404
   },
-  props:{
+  props: {
     username: {
       type: String
     }
@@ -64,23 +59,32 @@ export default {
       user: [],
       image: "",
       error: "",
-      newNote: "",
-      Note1: ""
-    }
+      notes: [],
+      note: { content: "", userId: "" }
+    };
   },
-  created(){
-    if(localStorage.getItem('note1')) this.Note1 = localStorage.getItem('note1');
+  mounted() {
+    gitService
+      .gitUser(this.username)
+      .then(response => {
+        this.user = response.data;
+        this.image = response.data.avatar_url;
+        this.note.userId = this.user.id;
+        if (localStorage.getItem("notes"))
+          this.notes = JSON.parse(localStorage.getItem("notes"));
+      })
+      .catch(errors => {
+        this.error = errors.message;
+      });
+  },
+  methods: {
+    storeLocal() {
+      this.notes.push(Object.assign({}, this.note));
+      const allNotes = JSON.parse(localStorage.getItem("notes"));
+      allNotes.push(Object.assign({}, this.note));
+      localStorage.setItem("notes", JSON.stringify(allNotes));
 
-    gitService.gitUser(this.username).then(response => {
-      this.user = response.data;
-      this.image = response.data.avatar_url
-    }).catch(errors =>{
-      this.error = errors.message;
-    })
-  },
-  methods:{
-    storeLocal(){
-      localStorage.setItem('note1', this.newNote);
+      this.note.content = "";
     }
   }
 };

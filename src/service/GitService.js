@@ -3,7 +3,8 @@ import Axios from "axios";
 export default class GitService {
   constructor() {
     Axios.defaults.baseURL = "https://api.github.com/";
-    Axios.defaults.headers.common['Authorization'] = 'Bearer ' + 'be8991555b28a4cf0d068daa36b852e3a27c3467';
+    Axios.defaults.headers.common["Authorization"] =
+      "Bearer " + "bba1605e7ca3818a7dcf2b4d0d3afd667a2a65fd";
   }
   gitRepos(username) {
     return Axios.get(`users/${username}/repos`, username);
